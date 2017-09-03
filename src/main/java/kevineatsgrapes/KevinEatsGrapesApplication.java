@@ -1,6 +1,7 @@
 package kevineatsgrapes;
 
 import io.dropwizard.Application;
+import io.dropwizard.assets.AssetsBundle;
 import io.dropwizard.configuration.EnvironmentVariableSubstitutor;
 import io.dropwizard.configuration.SubstitutingSourceProvider;
 import io.dropwizard.db.PooledDataSourceFactory;
@@ -8,10 +9,12 @@ import io.dropwizard.jdbi.DBIFactory;
 import io.dropwizard.migrations.MigrationsBundle;
 import io.dropwizard.setup.Bootstrap;
 import io.dropwizard.setup.Environment;
+import io.dropwizard.views.ViewBundle;
 import kevineatsgrapes.dao.MealsDao;
 import kevineatsgrapes.health.TemplateHealthCheck;
 import kevineatsgrapes.resources.HelloWorldResource;
 import kevineatsgrapes.resources.MealsResource;
+import kevineatsgrapes.resources.ViewsResource;
 import org.skife.jdbi.v2.DBI;
 
 public class KevinEatsGrapesApplication extends Application<KevinEatsGrapesConfiguration> {
@@ -27,6 +30,8 @@ public class KevinEatsGrapesApplication extends Application<KevinEatsGrapesConfi
 
   @Override
   public void initialize(final Bootstrap<KevinEatsGrapesConfiguration> bootstrap) {
+    bootstrap.addBundle(new ViewBundle<>());
+
     bootstrap.setConfigurationSourceProvider(
         new SubstitutingSourceProvider(bootstrap.getConfigurationSourceProvider(),
             new EnvironmentVariableSubstitutor()));
@@ -38,6 +43,8 @@ public class KevinEatsGrapesApplication extends Application<KevinEatsGrapesConfi
         return kevinEatsGrapesConfiguration.getDataSourceFactory();
       }
     });
+
+    bootstrap.addBundle(new AssetsBundle("/assets", "/assets"));
   }
 
   @Override
@@ -56,9 +63,11 @@ public class KevinEatsGrapesApplication extends Application<KevinEatsGrapesConfi
 
     final MealsDao mealsDao = jdbi.onDemand(MealsDao.class);
     final MealsResource mealsResource = new MealsResource(mealsDao);
+    final ViewsResource viewsResource = new ViewsResource(mealsDao);
 
     environment.healthChecks().register("template", healthCheck);
     environment.jersey().register(helloWorldResource);
     environment.jersey().register(mealsResource);
+    environment.jersey().register(viewsResource);
   }
 }
