@@ -13,14 +13,8 @@ database:
   # the name of your JDBC driver
   driverClass: org.postgresql.Driver
 
-  # the username
-  user: pguser
-
-  # the password
-  password: password
-
   # the JDBC URL
-  url: jdbc:postgresql://localhost/kevineatsgrapes
+  url: ${DATABASE_URL}
 
   # any properties specific to your JDBC driver:
   properties:

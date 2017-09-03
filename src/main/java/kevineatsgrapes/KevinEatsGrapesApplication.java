@@ -1,6 +1,8 @@
 package kevineatsgrapes;
 
 import io.dropwizard.Application;
+import io.dropwizard.configuration.EnvironmentVariableSubstitutor;
+import io.dropwizard.configuration.SubstitutingSourceProvider;
 import io.dropwizard.db.PooledDataSourceFactory;
 import io.dropwizard.jdbi.DBIFactory;
 import io.dropwizard.migrations.MigrationsBundle;
@@ -25,6 +27,10 @@ public class KevinEatsGrapesApplication extends Application<KevinEatsGrapesConfi
 
   @Override
   public void initialize(final Bootstrap<KevinEatsGrapesConfiguration> bootstrap) {
+    bootstrap.setConfigurationSourceProvider(
+        new SubstitutingSourceProvider(bootstrap.getConfigurationSourceProvider(),
+            new EnvironmentVariableSubstitutor()));
+
     bootstrap.addBundle(new MigrationsBundle<KevinEatsGrapesConfiguration>() {
       @Override
       public PooledDataSourceFactory getDataSourceFactory(
@@ -41,12 +47,12 @@ public class KevinEatsGrapesApplication extends Application<KevinEatsGrapesConfi
         configuration.getTemplate(),
         configuration.getDefaultName());
 
-
     final TemplateHealthCheck healthCheck = new TemplateHealthCheck(
         configuration.getTemplate());
 
     final DBIFactory factory = new DBIFactory();
-    final DBI jdbi = factory.build(environment, configuration.getDataSourceFactory(), "kevineatsgrapes");
+    final DBI jdbi = factory
+        .build(environment, configuration.getDataSourceFactory(), "kevineatsgrapes");
 
     final MealsDao mealsDao = jdbi.onDemand(MealsDao.class);
     final MealsResource mealsResource = new MealsResource(mealsDao);
