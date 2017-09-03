@@ -1,11 +1,12 @@
 package kevineatsgrapes;
 
-import io.dropwizard.Configuration;
 import com.fasterxml.jackson.annotation.JsonProperty;
-import org.glassfish.jersey.server.JSONP;
-import org.hibernate.validator.constraints.*;
-
-import javax.validation.constraints.*;
+import io.dropwizard.Configuration;
+import io.dropwizard.db.DataSourceFactory;
+import io.dropwizard.db.DatabaseConfiguration;
+import javax.validation.Valid;
+import javax.validation.constraints.NotNull;
+import org.hibernate.validator.constraints.NotEmpty;
 
 public class KevinEatsGrapesConfiguration extends Configuration {
 
@@ -14,6 +15,11 @@ public class KevinEatsGrapesConfiguration extends Configuration {
 
   @NotEmpty
   private String defaultName = "Stranger";
+
+  @Valid
+  @NotNull
+  @JsonProperty
+  private DataSourceFactory database = new DataSourceFactory();
 
   @JsonProperty
   public String getTemplate() {
@@ -33,5 +39,9 @@ public class KevinEatsGrapesConfiguration extends Configuration {
   @JsonProperty
   public void setDefaultName(String defaultName) {
     this.defaultName = defaultName;
+  }
+
+  public DataSourceFactory getDataSourceFactory() {
+    return database;
   }
 }

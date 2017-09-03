@@ -1,10 +1,16 @@
 package kevineatsgrapes;
 
 import io.dropwizard.Application;
+import io.dropwizard.db.PooledDataSourceFactory;
+import io.dropwizard.jdbi.DBIFactory;
+import io.dropwizard.migrations.MigrationsBundle;
 import io.dropwizard.setup.Bootstrap;
 import io.dropwizard.setup.Environment;
+import kevineatsgrapes.dao.MealsDao;
 import kevineatsgrapes.health.TemplateHealthCheck;
-import kevineatsgrapes.resources.KevinEatsGrapesResource;
+import kevineatsgrapes.resources.HelloWorldResource;
+import kevineatsgrapes.resources.MealsResource;
+import org.skife.jdbi.v2.DBI;
 
 public class KevinEatsGrapesApplication extends Application<KevinEatsGrapesConfiguration> {
 
@@ -19,18 +25,34 @@ public class KevinEatsGrapesApplication extends Application<KevinEatsGrapesConfi
 
   @Override
   public void initialize(final Bootstrap<KevinEatsGrapesConfiguration> bootstrap) {
-    // TODO: application initialization
+    bootstrap.addBundle(new MigrationsBundle<KevinEatsGrapesConfiguration>() {
+      @Override
+      public PooledDataSourceFactory getDataSourceFactory(
+          KevinEatsGrapesConfiguration kevinEatsGrapesConfiguration) {
+        return kevinEatsGrapesConfiguration.getDataSourceFactory();
+      }
+    });
   }
 
   @Override
   public void run(final KevinEatsGrapesConfiguration configuration,
       final Environment environment) {
-    final KevinEatsGrapesResource resource = new KevinEatsGrapesResource(
+    final HelloWorldResource helloWorldResource = new HelloWorldResource(
         configuration.getTemplate(),
         configuration.getDefaultName());
+
+
     final TemplateHealthCheck healthCheck = new TemplateHealthCheck(
         configuration.getTemplate());
+
+    final DBIFactory factory = new DBIFactory();
+    final DBI jdbi = factory.build(environment, configuration.getDataSourceFactory(), "kevineatsgrapes");
+
+    final MealsDao mealsDao = jdbi.onDemand(MealsDao.class);
+    final MealsResource mealsResource = new MealsResource(mealsDao);
+
     environment.healthChecks().register("template", healthCheck);
-    environment.jersey().register(resource);
+    environment.jersey().register(helloWorldResource);
+    environment.jersey().register(mealsResource);
   }
 }
