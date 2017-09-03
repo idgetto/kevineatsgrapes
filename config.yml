@@ -14,7 +14,7 @@ database:
   driverClass: org.postgresql.Driver
 
   # the JDBC URL
-  url: ${DATABASE_URL}
+  url: ${JDBC_DATABASE_URL}
 
   # any properties specific to your JDBC driver:
   properties:
