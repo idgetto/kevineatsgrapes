@@ -46,8 +46,8 @@
     }
 
     function addTotal(total) {
-      $("#total").append("<h1 id=\"total-grapes\">" + total + "</h1>");
-      $("#total").append("<h1> grapes</h1>");
+      $("#total").append("<h1 class=\"jumbo\" id=\"total-grapes\">" + total + "</h1>");
+      $("#total").append("<h2> grapes</h2>");
       var numAnim = new CountUp("total-grapes", 0, total, 0, 2.5);
       numAnim.start();
     }
