@@ -17,7 +17,7 @@ public interface MealsDao {
   @SqlQuery("SELECT SUM(count) FROM meals")
   int getTotal();
 
-  @SqlQuery("SELECT * FROM meals")
+  @SqlQuery("SELECT * FROM meals ORDER BY time DESC")
   List<Meal> getAll();
 
   @SqlQuery("SELECT * FROM meals WHERE id = :id")
