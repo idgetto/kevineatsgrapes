@@ -5,6 +5,7 @@ import javax.ws.rs.Path;
 import javax.ws.rs.Produces;
 import javax.ws.rs.core.MediaType;
 import kevineatsgrapes.dao.MealsDao;
+import kevineatsgrapes.views.IndexView;
 import kevineatsgrapes.views.TotalView;
 
 @Path("/")
@@ -16,8 +17,14 @@ public class ViewsResource {
     this.mealsDao = mealsDao;
   }
 
+//  @GET
+//  @Path("index")
+//  public TotalView get() {
+//    return new TotalView(mealsDao.getTotal());
+//  }
+
   @GET
-  public TotalView get() {
-    return new TotalView(mealsDao.getTotal());
+  public IndexView getIndex() {
+    return new IndexView();
   }
 }
