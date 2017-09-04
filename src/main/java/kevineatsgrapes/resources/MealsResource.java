@@ -2,6 +2,7 @@ package kevineatsgrapes.resources;
 
 
 import com.codahale.metrics.annotation.Timed;
+import io.dropwizard.auth.Auth;
 import java.util.List;
 import javax.ws.rs.Consumes;
 import javax.ws.rs.GET;
@@ -10,6 +11,7 @@ import javax.ws.rs.Path;
 import javax.ws.rs.Produces;
 import javax.ws.rs.core.MediaType;
 import kevineatsgrapes.api.Meal;
+import kevineatsgrapes.auth.Authenticated;
 import kevineatsgrapes.dao.MealsDao;
 
 @Path("/meals")
@@ -37,6 +39,7 @@ public class MealsResource {
   }
 
   @POST
+  @Authenticated
   public Meal create(Meal meal) {
     int id = mealsDao.insert(meal);
     return new Meal(id, meal.getCount(), meal.getTime());

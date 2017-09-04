@@ -2,6 +2,9 @@ package kevineatsgrapes;
 
 import io.dropwizard.Application;
 import io.dropwizard.assets.AssetsBundle;
+import io.dropwizard.auth.AuthDynamicFeature;
+import io.dropwizard.auth.AuthFilter;
+import io.dropwizard.auth.AuthValueFactoryProvider;
 import io.dropwizard.configuration.EnvironmentVariableSubstitutor;
 import io.dropwizard.configuration.SubstitutingSourceProvider;
 import io.dropwizard.db.PooledDataSourceFactory;
@@ -10,6 +13,8 @@ import io.dropwizard.migrations.MigrationsBundle;
 import io.dropwizard.setup.Bootstrap;
 import io.dropwizard.setup.Environment;
 import io.dropwizard.views.ViewBundle;
+import kevineatsgrapes.auth.SimpleAuthFilter;
+import kevineatsgrapes.auth.SimpleDynamicAuthFilter;
 import kevineatsgrapes.dao.MealsDao;
 import kevineatsgrapes.health.TemplateHealthCheck;
 import kevineatsgrapes.resources.HelloWorldResource;
@@ -69,5 +74,6 @@ public class KevinEatsGrapesApplication extends Application<KevinEatsGrapesConfi
     environment.jersey().register(helloWorldResource);
     environment.jersey().register(mealsResource);
     environment.jersey().register(viewsResource);
+    environment.jersey().register(new SimpleDynamicAuthFilter());
   }
 }
