@@ -16,6 +16,7 @@ public class Meal {
   long time;
 
   public Meal() {
+    this.time = System.currentTimeMillis();
   }
 
   public Meal(long id, int count, long time) {
