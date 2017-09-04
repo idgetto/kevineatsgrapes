@@ -29,6 +29,7 @@
   <link rel="icon" type="image/png" href="assets/images/favicon.png">
 
   <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script>
+  <script src="assets/js/countUp.js"></script>
 
   <script>
     console.log("start");
@@ -50,7 +51,10 @@
     }
 
     function addTotal(total) {
-      $("#total").append("<h1>" + total + " grapes</h1>");
+      $("#total").append("<h1 id=\"total-grapes\">" + total + "</h1>");
+      $("#total").append("<h1> grapes</h1>");
+      var numAnim = new CountUp("total-grapes", 0, total, 0, 2.5);
+      numAnim.start();
     }
 
     function addTable(meals) {
