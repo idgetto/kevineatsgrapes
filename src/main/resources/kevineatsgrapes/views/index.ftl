@@ -32,16 +32,11 @@
   <script src="assets/js/countUp.js"></script>
 
   <script>
-    console.log("start");
-    console.log(getUrl());
     $(document).ready(function() {
       $.get(getUrl(), function(data, status){
         if (status === "success") {
-          console.log("success");
           addTotal(data['total']);
           addTable(data['meals']);
-        } else {
-          console.log("fail");
         }
       });
     });
