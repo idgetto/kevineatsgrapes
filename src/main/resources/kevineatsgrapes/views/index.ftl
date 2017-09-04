@@ -46,8 +46,8 @@
     }
 
     function addTotal(total) {
-      $("#total").append("<h1 class=\"jumbo\" id=\"total-grapes\">" + total + "</h1>");
-      $("#total").append("<h2> grapes</h2>");
+      $("#total").append("<h1 style=\"display:inline\" class=\"jumbo\" id=\"total-grapes\">" + total + "</h1>");
+      $("#total").append("<h1 style=\"display:inline\" class=\"jumbo\"> grapes</h1>");
       var numAnim = new CountUp("total-grapes", 0, total, 0, 2.5);
       numAnim.start();
     }
@@ -69,7 +69,7 @@
   <div class="row">
     <div class="twelve columns">
       <div class="hero">
-        <h2><a class="sly" target="_blank" href="https://www.linkedin.com/in/kevin-crispie-94374418/">Kevin</a> has eaten</h2>
+        <h2>Kevin has eaten</h2>
         <div id="total">
         </div>
         <table class="u-full-width" style="margin-top: 6em">
