@@ -36,7 +36,8 @@ public class Meal {
 
   @JsonProperty
   public String getDate() {
-    LocalDateTime dateTime = LocalDateTime.ofInstant(Instant.ofEpochMilli(getTime()), ZoneId.of("EST", ZoneId.SHORT_IDS));
+    ZoneId zoneId = ZoneId.of("America/New_York");
+    LocalDateTime dateTime = LocalDateTime.ofInstant(Instant.ofEpochMilli(getTime()), zoneId);
     return dateTime.format(DateTimeFormatter.ofPattern("MM/dd/yy h:mm a"));
   }
 }
