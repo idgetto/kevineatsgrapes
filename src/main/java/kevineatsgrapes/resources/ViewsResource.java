@@ -1,30 +1,23 @@
 package kevineatsgrapes.resources;
 
+import com.codahale.metrics.Meter;
+import com.codahale.metrics.annotation.Timed;
 import javax.ws.rs.GET;
 import javax.ws.rs.Path;
 import javax.ws.rs.Produces;
 import javax.ws.rs.core.MediaType;
-import kevineatsgrapes.dao.MealsDao;
+import kevineatsgrapes.metrics.KevinMetrics;
 import kevineatsgrapes.views.IndexView;
-import kevineatsgrapes.views.TotalView;
 
 @Path("/")
 @Produces(MediaType.TEXT_HTML)
 public class ViewsResource {
-  private final MealsDao mealsDao;
-
-  public ViewsResource(MealsDao mealsDao) {
-    this.mealsDao = mealsDao;
-  }
-
-//  @GET
-//  @Path("index")
-//  public TotalView get() {
-//    return new TotalView(mealsDao.getTotal());
-//  }
+  private final Meter requests = KevinMetrics.METRIC_REGISTRY.meter("requests");
 
   @GET
+  @Timed
   public IndexView getIndex() {
+    requests.mark();
     return new IndexView();
   }
 }

@@ -2,9 +2,6 @@ package kevineatsgrapes;
 
 import io.dropwizard.Application;
 import io.dropwizard.assets.AssetsBundle;
-import io.dropwizard.auth.AuthDynamicFeature;
-import io.dropwizard.auth.AuthFilter;
-import io.dropwizard.auth.AuthValueFactoryProvider;
 import io.dropwizard.configuration.EnvironmentVariableSubstitutor;
 import io.dropwizard.configuration.SubstitutingSourceProvider;
 import io.dropwizard.db.PooledDataSourceFactory;
@@ -13,6 +10,8 @@ import io.dropwizard.migrations.MigrationsBundle;
 import io.dropwizard.setup.Bootstrap;
 import io.dropwizard.setup.Environment;
 import io.dropwizard.views.ViewBundle;
+import java.util.Collections;
+import java.util.EnumSet;
 import kevineatsgrapes.auth.SimpleAuthFilter;
 import kevineatsgrapes.auth.SimpleDynamicAuthFilter;
 import kevineatsgrapes.dao.MealsDao;
@@ -20,6 +19,7 @@ import kevineatsgrapes.health.TemplateHealthCheck;
 import kevineatsgrapes.resources.HelloWorldResource;
 import kevineatsgrapes.resources.MealsResource;
 import kevineatsgrapes.resources.ViewsResource;
+import kevineatsgrapes.servlets.KevinMetricsServlet;
 import org.skife.jdbi.v2.DBI;
 
 public class KevinEatsGrapesApplication extends Application<KevinEatsGrapesConfiguration> {
@@ -66,14 +66,15 @@ public class KevinEatsGrapesApplication extends Application<KevinEatsGrapesConfi
     final DBI jdbi = factory
         .build(environment, configuration.getDataSourceFactory(), "kevineatsgrapes");
 
+    final ViewsResource viewsResource = new ViewsResource();
     final MealsDao mealsDao = jdbi.onDemand(MealsDao.class);
     final MealsResource mealsResource = new MealsResource(mealsDao);
-    final ViewsResource viewsResource = new ViewsResource(mealsDao);
 
     environment.healthChecks().register("template", healthCheck);
     environment.jersey().register(helloWorldResource);
     environment.jersey().register(mealsResource);
     environment.jersey().register(viewsResource);
     environment.jersey().register(new SimpleDynamicAuthFilter());
+    environment.servlets().addServlet("metrics", new KevinMetricsServlet()).addMapping("/metrics");
   }
 }
