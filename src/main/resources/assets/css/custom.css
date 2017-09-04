@@ -10,3 +10,8 @@
 .jumbo {
   font-size: 10em;
 }
+
+a.sly {
+  color: inherit; /* blue colors for links too */
+  text-decoration: inherit; /* no underline */
+}

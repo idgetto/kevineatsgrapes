@@ -69,7 +69,7 @@
   <div class="row">
     <div class="twelve columns">
       <div class="hero">
-        <h2>Kevin has eaten</h2>
+        <h2><a class="sly" target="_blank" href="https://www.linkedin.com/in/kevin-crispie-94374418/">Kevin</a> has eaten</h2>
         <div id="total">
         </div>
         <table class="u-full-width" style="margin-top: 6em">
