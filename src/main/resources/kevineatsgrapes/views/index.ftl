@@ -100,6 +100,11 @@
       </div>
     </div>
   </div>
+
+  <div class="grape">
+    <a href="assets/game.html"><img src="assets/images/grape.png"></a>
+  </div>
+</div>
 </div>
 
 <!-- End Document
