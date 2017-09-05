@@ -27,7 +27,8 @@ function preload(){
 
 function setup() {
   pixelDensity(1);
-  createCanvas(600,600);
+  var canvas = createCanvas(600,600);
+  canvas.parent('sketch-holder');
 
   //create Kevin
   kevin = new Kevin(width/2);
