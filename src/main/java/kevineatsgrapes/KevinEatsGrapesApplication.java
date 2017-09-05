@@ -2,6 +2,7 @@ package kevineatsgrapes;
 
 import io.dropwizard.Application;
 import io.dropwizard.assets.AssetsBundle;
+import io.dropwizard.client.HttpClientBuilder;
 import io.dropwizard.configuration.EnvironmentVariableSubstitutor;
 import io.dropwizard.configuration.SubstitutingSourceProvider;
 import io.dropwizard.db.PooledDataSourceFactory;
@@ -18,8 +19,10 @@ import kevineatsgrapes.dao.MealsDao;
 import kevineatsgrapes.health.TemplateHealthCheck;
 import kevineatsgrapes.resources.HelloWorldResource;
 import kevineatsgrapes.resources.MealsResource;
+import kevineatsgrapes.resources.ProxyResource;
 import kevineatsgrapes.resources.ViewsResource;
 import kevineatsgrapes.servlets.KevinMetricsServlet;
+import org.apache.http.client.HttpClient;
 import org.skife.jdbi.v2.DBI;
 
 public class KevinEatsGrapesApplication extends Application<KevinEatsGrapesConfiguration> {
@@ -70,11 +73,15 @@ public class KevinEatsGrapesApplication extends Application<KevinEatsGrapesConfi
     final MealsDao mealsDao = jdbi.onDemand(MealsDao.class);
     final MealsResource mealsResource = new MealsResource(mealsDao);
 
+    final HttpClient httpClient = new HttpClientBuilder(environment)
+        .using(configuration.getHttpClientConfiguration()).build(getName());
+
     environment.healthChecks().register("template", healthCheck);
     environment.jersey().register(helloWorldResource);
     environment.jersey().register(mealsResource);
     environment.jersey().register(viewsResource);
     environment.jersey().register(new SimpleDynamicAuthFilter());
+    environment.jersey().register(new ProxyResource(httpClient));
     environment.servlets().addServlet("metrics", new KevinMetricsServlet()).addMapping("/metrics");
   }
 }
