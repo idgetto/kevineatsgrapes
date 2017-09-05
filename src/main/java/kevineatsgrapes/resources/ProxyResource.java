@@ -22,6 +22,7 @@ import org.apache.http.impl.client.BasicResponseHandler;
 @Path("/analytics")
 @Produces(MediaType.TEXT_PLAIN)
 public class ProxyResource {
+
   private final HttpClient httpClient;
   private final BasicResponseHandler basicResponseHandler;
 
@@ -32,8 +33,8 @@ public class ProxyResource {
 
   @GET
   @Path("/r/collect")
-  public Response send(@Context HttpServletRequest request) throws IOException {
-    String url = "http://www.google-analytics.com/analytics/r/collect/?" + request.getQueryString();
+  public Response collectR(@Context HttpServletRequest request) throws IOException {
+    String url = getUrl(true) + request.getQueryString();
     HttpGet httpGet = new HttpGet(url);
 
     Enumeration<String> headerNames = request.getHeaderNames();
@@ -49,7 +50,43 @@ public class ProxyResource {
       System.out.println(header.getName() + " : " + header.getValue());
     }
 
-    httpClient.execute(httpGet);
-    return Response.noContent().build();
+    HttpResponse response = httpClient.execute(httpGet);
+    for (Header header : response.getAllHeaders()) {
+      System.out.println("response: " + header.getName() + " : " + header.getValue());
+    }
+    return Response.ok().build();
+  }
+
+  @GET
+  @Path("/collect")
+  public Response collect(@Context HttpServletRequest request) throws IOException {
+    String url = getUrl(false) + request.getQueryString();
+    HttpGet httpGet = new HttpGet(url);
+
+    Enumeration<String> headerNames = request.getHeaderNames();
+    while (headerNames.hasMoreElements()) {
+      String name = headerNames.nextElement();
+      String value = request.getHeader(name);
+      httpGet.setHeader(name, value);
+    }
+
+    System.out.println(httpGet);
+    System.out.println(httpGet.getAllHeaders());
+    for (Header header : httpGet.getAllHeaders()) {
+      System.out.println(header.getName() + " : " + header.getValue());
+    }
+
+    HttpResponse response = httpClient.execute(httpGet);
+    for (Header header : response.getAllHeaders()) {
+      System.out.println("response: " + header.getName() + " : " + header.getValue());
+    }
+    return Response.ok().build();
+  }
+
+  private String getUrl(boolean useR) {
+    if (useR) {
+      return "http://www.google-analytics.com/analytics/r/collect/?";
+    }
+    return "http://www.google-analytics.com/analytics/collect/?";
   }
 }

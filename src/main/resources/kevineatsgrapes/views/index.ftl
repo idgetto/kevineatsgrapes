@@ -70,7 +70,7 @@
     ga('send', 'pageview');
 
     function getGaUrl() {
-      return $(location).attr("protocol") + "//" + $(location).attr("host") + "/assets/js/ga.js";
+      return $(location).attr("protocol") + "//" + $(location).attr("host") + "/assets/js/gareal.js";
     }
 
   </script>
