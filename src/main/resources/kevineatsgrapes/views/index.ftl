@@ -90,8 +90,8 @@
     <!-- Primary Page Layout
     –––––––––––––––––––––––––––––––––––––––––––––––––– -->
     <div class="container">
-      <div class="grape">
-        <a href="assets/game.html"><img src="assets/images/grape.png"></a>
+      <div class="grape pulse">
+        <a id="game-link" href="assets/game.html"><img src="assets/images/grape.png"></a>
       </div>
       <div class="row">
         <div class="twelve columns">
@@ -114,6 +114,19 @@
       </div>
     </div>
     </div>
+
+    <#--<script>-->
+      <#--console.log("here");-->
+      <#--var original = $("#game-link").html();-->
+      <#--console.log(original);-->
+      <#--$("div.grape").mouseenter(function () {-->
+        <#--console.log("over");-->
+        <#--$("#game-link").html("<h1>CLICK ME</h1>");-->
+      <#--}).mouseleave(function () {-->
+        <#--console.log("out");-->
+        <#--$("#game-link").html(original);-->
+      <#--});-->
+    <#--</script>-->
 
     <!-- End Document
       –––––––––––––––––––––––––––––––––––––––––––––––––– -->

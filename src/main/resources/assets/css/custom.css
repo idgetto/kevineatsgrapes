@@ -21,3 +21,22 @@ a.sly {
   text-align: center;
   margin-bottom: 15px;
 }
+
+@keyframes pulse_animation {
+  0% { transform: scale(1); }
+  50% { transform: scale(1.5); }
+  100% { transform: scale(1); }
+}
+
+.pulse {
+  -webkit-animation-name: pulse_animation;
+  -webkit-animation-duration: 5000ms;
+  /*-webkit-transform-origin:70% 70%;*/
+  -webkit-animation-iteration-count: infinite;
+  -webkit-animation-timing-function: linear;
+  -moz-animation-name: pulse_animation;
+  -moz-animation-duration: 5000ms;
+  /*-moz-transform-origin:70% 70%;*/
+  -moz-animation-iteration-count: infinite;
+  -moz-animation-timing-function: linear;
+}
